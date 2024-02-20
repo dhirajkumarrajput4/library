@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:c="http://www.thymeleaf.org/extras/core">
+<head>
+	<th:block th:include="components/All_Js_css"></th:block>
+</head>
+<body>
+<!-- navbar -->
+<th:block th:include="components/nav"></th:block>
+
+<div class="container mt-2" style="background-color: #f7f8f9; height: 560px;">
+
+	<div class="card" style="color: white; background: rgb(188, 230, 199); font-size: 21px;">
+		<div class="card-header">
+			<h4 style="position: absolute;">User Details</h4>
+			<div class="container text-right" style="position: relative;">
+				<a th:href="@{/}" class="btn btn-outline-secondary">Home</a>
+				<a th:href="@{/viewUser}" class="btn btn-outline-secondary">Back</a>
+			</div>
+		</div>
+
+		<div class="card-body background">
+			<h4 class="card-title" th:text="${user.firstName + ' ' + user.lastName}"></h4>
+			<b>Email:</b> <span th:text="${user.email}"></span><br>
+			<b>Phone:</b> <span th:text="${user.phone}"></span><br>
+			<b>Address:</b> <span th:text="${user.address}"></span><br>
+			<div class="container text-center">
+				<a th:href="@{/update/{id}(id=${user.id})}" class="btn btn-primary mt-5">Edit Details</a>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>

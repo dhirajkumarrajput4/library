@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:c="http://www.thymeleaf.org/extras/core">
+<head>
+	<meta charset="UTF-8">
+	<title>Results</title>
+	<th:block th:include="components/All_Js_css"></th:block>
+</head>
+<body>
+<th:block th:include="components/nav"></th:block>
+
+<main class="mt-5">
+	<!-- card -->
+	<th:block th:if="${#lists.isNotEmpty(books)}">
+		<div class="container">
+			<div class="row">
+				<div th:each="b : ${books}" class="col-md-4">
+					<div class="card">
+						<div class="card-body">
+							<h4 class="card-title" style="position: absolute;" th:text="${b.booktitle}"></h4>
+							<h5 class="card-title text-right" style="position: relative; color: red;"><span style="font-size: 15px">Available: </span>
+								<span th:text="${b.bookquantity}"></span>
+							</h5>
+							<p class="card-text" th:text="${b.bookdescription}"></p>
+							<h6 class="text-right" th:text="${'Author: ' + b.bookauthor}"></h6>
+							<a href="#" class="btn primary-background text-white">Read more</a>
+							<th:block th:if="${logedUser != null}">
+								<a th:href="@{/updatebook/{id}(id=${b.bookid})}" class="btn btn-success text-white">Update</a>
+								<a th:href="@{/deletebook/{id}(id=${b.bookid})}" class="btn btn-danger text-white">Delete</a>
+							</th:block>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</th:block>
+</main>
+</body>
+</html>

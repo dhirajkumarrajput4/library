@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:form="http://www.thymeleaf.org/extras/spring-form">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>My-Online Bookstore</title>
+    <style type="text/css">
+        .error {
+            color: red;
+        }
+    </style>
+
+    <!-- Include JavaScript and CSS files -->
+    <th:block th:include="~{components/All_Js_css :: head}"></th:block>
+
+    <!-- Show model automatically -->
+    <th:block th:if="${error == true}">
+        <script th:inline="javascript">
+            $(document).ready(function() {
+                $('#bookUpdateModel').modal('show');
+            });
+        </script>
+    </th:block>
+
+    <th:block th:if="${book.bookid != 0}">
+        <script th:inline="javascript">
+            $(document).ready(function() {
+                $('#bookUpdateModel').modal('show');
+            });
+        </script>
+    </th:block>
+</head>
+<body>
+<!-- Include navigation component -->
+<th:block th:replace="~{components/nav :: nav}"></th:block>
+
+<div class="container-fluid p-0 m-0">
+    <div class="jumbotron primary-background text-white banner-background">
+        <div class="container">
+            <!--            <th:block th:if="${usertype}">-->
+            <th:block th:if="${session.logedUser?.userType == 'admin'}">
+                <h5 th:if="${session.logedUser?.firstName}" th:text="'Hello, Admin ' + ${session.logedUser?.firstName} + '!'"
+                    class="display-4">Hello, Admin!</h5>
+            </th:block>
+            <th:block th:if="${session.logedUser?.userType != 'admin'}">
+                <h5 th:if="${session.logedUser?.firstName}" th:text="'Hello, ' + ${session.logedUser?.firstName} + '!'"
+                    class="display-4">Hello</h5>
+            </th:block>
+
+            <h3 class="display-3">Welcome to MY Online Bookstore</h3>
+            <h3>MY Online Bookstore</h3>
+            <p>A programming language is a formal language comprising a set
+                of strings that produce various kinds of machine code output.
+                Programming languages are one kind of computer language, and are
+                used in computer programming to implement algorithms.</p>
+
+            <p>Most programming languages consist of instructions for
+                computers. There are programmable machines that use a set of
+                specific instructions, rather than general programming languages.
+                Since the early 1800s, programs have been used to direct the
+                behavior of machines such as Jacquard looms, music boxes and player
+                pianos.[1] The programs for these machines (such as a player
+                piano's scrolls) did not produce different behavior in response to
+                different inputs or conditions.</p>
+
+
+            <th:block th:if="${not #strings.isEmpty(session.logedUser)}">
+                <th:block th:if="${session.logedUser?.userType == 'admin'}">
+                    <button type="button" class="btn btn-outline-light btn-lg"
+                            data-toggle="modal" th:data-bs-target="bookUpdateModel" href="#bookUpdateModel">
+                        <span class="fa fa-book fa-spin"></span>Add New Books
+                    </button>
+                    <a class="btn btn-outline-light btn-lg"
+                       th:href=" @{/sellBooks}">
+                        <span class="fa fa-book fa-spin"></span>All Sells Books
+                    </a>
+                </th:block>
+            </th:block>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap Modal For add Book-->
+<!-- Modal -->
+<div class="modal fade"  id="bookUpdateModel" tabindex="-1" role="dialog"
+     aria-labelledby="exampleModalLabel" aria-hidden="false"
+     data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <th:block th:if="${book.bookid == 0}">
+                    <h5 class="modal-title" id="exampleModalLabel">Add Book</h5>
+                </th:block>
+                <th:block th:if="${book.bookid != 0}">
+                    <h5 class="modal-title" id="exampleModalLabel">Update Book</h5>
+                </th:block>
+                <a type="button" class="close"
+                   th:href="@{/}"><span
+                        aria-hidden="true">&times;</span>
+                </a>
+            </div>
+            <div class="modal-body">
+                <!-- Book form -->
+                <div class="card">
+                    <div class="card-header  primary-background text-white text-center">
+                        <span class="fa fa-book fa-3x"></span>
+                        <p>Books Details</p>
+                    </div>
+                    <div class="card-body">
+                        <!--form-->
+                        <form th:action="@{/registerbookform}" method="post"
+                              th:object="${book}">
+                            <th:block th:if="${book.bookid != 0}">
+                                <div class="form-group">
+                                    <input type="hidden" th:field="*{bookid}" class="form-control"/>
+                                </div>
+                            </th:block>
+                            <div class="form-group">
+                                <label for="booktitle">Book Title</label>
+                                <input type="text" th:field="*{booktitle}" id="booktitle" class="form-control"
+                                       placeholder="Book Title"/>
+                                <small class="error" th:if="${#fields.hasErrors('booktitle')}"
+                                       th:errors="*{booktitle}"></small>
+                            </div>
+                            <div class="form-group">
+                                <label for="bookAuther">Book Author</label>
+                                <input type="text" th:field="*{bookauthor}" id="bookAuther" class="form-control"
+                                       placeholder="Enter here"/>
+                                <small class="error" th:if="${#fields.hasErrors('bookauthor')}"
+                                       th:errors="*{bookauthor}"></small>
+                            </div>
+                            <div class="form-group">
+                                <label for="bookquantity">Book Quantity</label>
+                                <input type="number" th:field="*{bookquantity}" id="bookquantity" class="form-control"
+                                       placeholder="Enter here"/>
+                                <small class="error" th:if="${#fields.hasErrors('bookquantity')}"
+                                       th:errors="*{bookquantity}"></small>
+                            </div>
+                            <div class="form-group">
+                                <label for="description">Description</label>
+                                <textarea rows="4" th:field="*{bookdescription}" id="description" class="form-control"
+                                          placeholder="Enter here"></textarea>
+                                <small class="error"
+                                       th:if="${#fields.hasErrors('bookdescription')}"
+                                       th:errors="*{bookdescription}"></small>
+                            </div>
+                            <div class="form-group">
+                                <label for="price">Price</label>
+                                <input type="text" th:field="*{price}" id="price" class="form-control"
+                                       placeholder="Enter here"/>
+                                <small class="error" th:if="${#fields.hasErrors('price')}"
+                                       th:errors="*{price}"></small>
+                            </div>
+                            <div class="form-group">
+                                <label for="discount">Discount</label>
+                                <input type="text" th:field="*{discount}" id="discount" class="form-control"
+                                       placeholder="Enter here"/>
+                                <small class="error" th:if="${#fields.hasErrors('discount')}"
+                                       th:errors="*{discount}"></small>
+                            </div>
+                            <div class="container text-center mt-2">
+                                <button type="submit" class="btn btn-success">Save Book</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a type="button" class="btn btn-secondary"
+                   th:href="@{/}">Close</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Bootstrap modal section End -->
+
+<!--card-->
+<th:block th:if="${book != null}">
+    <div class="container">
+        <div class="row">
+            <th:block th:each="b : ${books}">
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title" style="position: absolute;" th:text="${b.booktitle}"></h4>
+                            <h5 class="card-title text-right"
+                                style="position: relative; color: red;">
+                                <span style="font-size: 15px">Available </span><span
+                                    th:text="${b.bookquantity}"></span></h5>
+                            <p class="card-text" th:text="${b.bookdescription}"></p>
+                            <h6 class="text-right" th:text="'Author: ' + ${b.bookauthor}"></h6>
+                            <h5 class="primary-background">
+                                Rs.
+                                <span th:text="${b.price}"></span>
+                            </h5>
+                            <h5 class="primary-background">
+                                Discount Price
+                                <span th:text="${b.discount * b.price / 100}"></span>
+                            </h5>
+                        </div>
+                        <div class="card-footer text-center">
+                            <th:block th:if="${session.logedUser != null}">
+                                <th:block th:if="${session.usertype == 'admin'}">
+                                    <a th:href="@{/updatebook/{bookid}(bookid=${b.bookid})}"
+                                       class="btn btn-success text-white">Update</a>
+                                    <a th:href="@{/deletebook/{bookid}(bookid=${b.bookid})}"
+                                       class="btn btn-danger text-white">Delete</a>
+                                </th:block>
+                                <th:block th:if="${usertype != 'admin'}">
+                                    <a th:href="@{/buy/{bookid}(bookid=${b.bookid})}"
+                                       class="btn btn-success text-white">Shop Now</a>
+                                </th:block>
+                            </th:block>
+                        </div>
+                    </div>
+                </div>
+            </th:block>
+        </div>
+    </div>
+</th:block>
+
+</body>
+</html>

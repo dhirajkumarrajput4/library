@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:c="http://www.thymeleaf.org/extras/core">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Register page</title>
+    <th:block th:include="components/All_Js_css"></th:block>
+    <style type="text/css">
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<th:block th:include="components/nav"></th:block>
+
+<main class="primary-background pt-4 pb-5 banner-background">
+    <div class="container">
+        <div class="col-md-6 offset-md-3">
+            <div class="card">
+                <div class="card-header  primary-background text-white text-center">
+                    <span class="fa fa-user-circle fa-3x"></span>
+                    <th:block th:if="${user.id == 0}">
+                        <p>Register here</p>
+                    </th:block>
+                    <th:block th:if="${user.id != 0}">
+                        <p>Update Details</p>
+                    </th:block>
+                </div>
+                <div class="card-body">
+                    <!-- form -->
+                    <form th:action="@{/registerform}" method="post" th:object="${user}">
+                        <th:block th:if="${user.id != 0}">
+                            <input type="hidden" th:field="*{id}" class="form-control" />
+                        </th:block>
+                        <div class="form-group">
+                            <label for="Name">First Name</label>
+                            <input th:field="*{firstName}" class="form-control" placeholder="Enter here"/>
+                            <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="error"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="Name">Last Name</label>
+                            <input th:field="*{lastName}" class="form-control" placeholder="Enter here"/>
+                            <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="error"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="Username">Email address</label>
+                            <input th:field="*{email}" class="form-control" placeholder="Enter email"/>
+                            <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input th:field="*{password}" type="password" class="form-control" placeholder="Enter here"/>
+                            <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone</label>
+                            <input th:field="*{phone}" class="form-control" placeholder="Enter here"/>
+                            <span th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}" class="error"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="address">Address</label>
+                            <textarea th:field="*{address}" rows="4" class="form-control" placeholder="Enter here"></textarea>
+                            <span th:if="${#fields.hasErrors('address')}" th:errors="*{address}" class="error"></span>
+                        </div>
+                        <!-- 	<div class="form-group">
+                                <label for="address">Profile</label>
+                                <input th:field="*{profilepic}" type="file" rows="4" class="form-control"/>
+                                <span th:if="${#fields.hasErrors('profilepic')}" th:errors="*{profilepic}" class="error"></span>
+                            </div> -->
+                        <div class="container text-center">
+                            <a href="login" style="font-weight: bold;">If you've already
+                                accout ! login here</a>
+                        </div>
+                        <div class="container text-center mt-2">
+                            <button type="submit" class="btn btn-success">Sign up</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+    // Your JavaScript code here
+</script>
+</body>
+</html>
